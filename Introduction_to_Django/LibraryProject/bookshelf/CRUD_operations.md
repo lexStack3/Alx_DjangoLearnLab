@@ -61,6 +61,7 @@ Perform and document each CRUD operation in the Django shell.
 
 #### Solution:
 ```python
+>>> from bookshelf.models import Book
 >>> # Deleting the book "Nineteen Eighty-Four"
 >>> book = Book.objects.get(title="Nineteen Eighty-Four")
 >>> book.delete()
