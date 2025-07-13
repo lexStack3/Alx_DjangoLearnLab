@@ -39,17 +39,17 @@ Perform and document each CRUD operation in the Django shell.
 - Command: Update the title of “1984” to “Nineteen Eighty-Four” and save the changes.
 - Expected Documentation: Include the Python command and a comment with the expected output showing the updated title.
 
-#### Solution:
+# Solution:
 ```python
 >>> # Updating the title of "1984" to "Nineteen Eighty-Four"
->>> book_1984 = Book.objects.get(title="1984")
+>>> book = Book.objects.get(title="1984")
 >>> # Before update
->>> book_1984
+>>> book
 <Book: 1984>
->>> book_1984.title = "Nineteen Eighty-Four"
->>> book_1984.save()
+>>> book.title = "Nineteen Eighty-Four"
+>>> book.save()
 >>> # After update
->>> book_1984
+>>> book
 <Book: Nineteen Eighty-Four
 ```
 
@@ -62,11 +62,11 @@ Perform and document each CRUD operation in the Django shell.
 #### Solution:
 ```python
 >>> # Deleting the book "Nineteen Eighty-Four"
->>> book_1984 = Book.objects.get(title="Nineteen Eighty-Four")
->>> book_1984.delete()
+>>> book = Book.objects.get(title="Nineteen Eighty-Four")
+>>> book.delete()
 (1, {'bookshelf.Book': 1})
 >>> # Trying to retrieve deleted item
->>> book_1984 = Book.objects.get(title="Nineteen Eighty-Four")
+>>> book = Book.objects.get(title="Nineteen Eighty-Four")
 Traceback (most recent call last):
   File "<console>", line 1, in <module>
   File "/home/lexstack/ALX_BACKEND/BACKEND_VENV/lib/python3.12/site-packages/django/db/models/manager.py", line 87, in manager_method

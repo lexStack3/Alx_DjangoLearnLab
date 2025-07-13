@@ -4,14 +4,14 @@
 - Document in: delete.md
 - Expected Documentation: Include the Python command and a comment with the expected output confirming the deletion.
 ---
-# Solution:
+## Solution:
 ```python
 >>> # Deleting the book "Nineteen Eighty-Four"
->>> book_1984 = Book.objects.get(title="Nineteen Eighty-Four")
->>> book_1984.delete()
+>>> book = Book.objects.get(title="Nineteen Eighty-Four")
+>>> book.delete()
 (1, {'bookshelf.Book': 1})
 >>> # Trying to retrieve deleted item
->>> book_1984 = Book.objects.get(title="Nineteen Eighty-Four")
+>>> book = Book.objects.get(title="Nineteen Eighty-Four")
 Traceback (most recent call last):
   File "<console>", line 1, in <module>
   File "/home/lexstack/ALX_BACKEND/BACKEND_VENV/lib/python3.12/site-packages/django/db/models/manager.py", line 87, in manager_method

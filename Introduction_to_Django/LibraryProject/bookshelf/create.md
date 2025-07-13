@@ -5,7 +5,7 @@
 - Expected Documentation: Include the Python command and a comment with the expected output noting the successful creation.
 
 ---
-# Solution:
+## Solution:
 ```python
 >>> from bookshelf.models import Book
 >>>
