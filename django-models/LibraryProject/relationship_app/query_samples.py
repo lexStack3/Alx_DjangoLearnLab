@@ -62,12 +62,12 @@ alex, _ = Librarian.objects.get_or_create(name="Alexander Edim", library=nationa
 # Quering all books by a specific author
 author_name = "Lewis Caroll"
 author = Author.objects.get(name=author_name)
-books = author.books.all()
+books = Book.objects.filter(author=author)
 print("="*40)
-print(f"Books by {lewis_caroll.name}")
+print(f"Books by {author}")
 print("="*40)
 for i, book in enumerate(books, start=1):
-    print("{}: {} by {}".format(i, book, book.author))
+    print("{}: {} by {}".format(i, book, author))
 
 # Listing all books in a library
 library_name = "NG Library"
