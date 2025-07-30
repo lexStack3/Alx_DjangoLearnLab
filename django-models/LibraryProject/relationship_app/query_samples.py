@@ -15,6 +15,12 @@ django.setup()
 
 from relationship_app.models import Author, Book, Library, Librarian
 
+# =================================================================================================
+#
+#                                   INSTANTIATION
+#
+# =================================================================================================
+
 # Author Instantiations
 lewis_caroll, _ = Author.objects.get_or_create(name="Lewis Caroll")
 george_martin, _ = Author.objects.get_or_create(name="George R. R. Martin")
@@ -48,8 +54,15 @@ national_library.books.set([wonderland,
 alex, _ = Librarian.objects.get_or_create(name="Alexander Edim", library=national_library)
 
 
+# =================================================================================================
+#
+#                                               TASK
+#
+# =================================================================================================
 # Quering all books by a specific author
-books = lewis_caroll.books.all()
+author_name = "Lewis Caroll"
+author = Author.objects.get(name=author_name)
+books = author.books.all()
 print("="*40)
 print(f"Books by {lewis_caroll.name}")
 print("="*40)
