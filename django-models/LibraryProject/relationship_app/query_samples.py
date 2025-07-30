@@ -57,9 +57,10 @@ for i, book in enumerate(books, start=1):
     print("{}: {} by {}".format(i, book, book.author))
 
 # Listing all books in a library
-lib_books = national_library.books.all()
+library = Library.objects.get(name="NG Library")
+lib_books = library.books.all()
 print("\n" + "="*40)
-print(f"Books in {national_library}")
+print(f"Books in {library}")
 print("="*40)
 for i, book in enumerate(lib_books, start=1):
     print("{}: {} by {}".format(i, book, book.author))
