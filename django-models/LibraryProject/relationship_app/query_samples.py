@@ -80,7 +80,8 @@ for i, book in enumerate(lib_books, start=1):
     print("{}: {} by {}".format(i, book, book.author))
 
 # Retrieves the librarian for a library
-librarian = national_library.librarian
+library = Library.objects.get(name="NG Library")
+librarian = Librarian.objects.get(library=library)
 print("\n" + "="*40)
 print(f"{national_library} Librarian")
 print("="*40)
