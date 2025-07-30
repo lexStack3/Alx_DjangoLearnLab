@@ -4,8 +4,12 @@
 - List all books in a library.
 - Retrieve the librarian for a library.
 """
-import os, django
+import os, sys, django
 
+# Adding the outer project directory to sys.path
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+# Setting correct Django settings module
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "LibraryProject.settings")
 django.setup()
 
