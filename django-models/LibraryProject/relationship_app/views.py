@@ -1,10 +1,9 @@
-from django.shortcuts import render
-from django.urls import reverse_lazy
+from django.shortcuts import render, redirect
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import CreateView
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib import auth
 from .models import Library, Book
-
+from .forms import RegistrationForm
 
 def list_books(request):
     books = Book.objects.all()
@@ -26,8 +25,41 @@ class LibraryDetailView(DetailView):
         return Library.objects.prefetch_related('books')
 
 
-class UserRegistrationForm(CreateView):
-    """Form for user creation."""
-    form_class = UserCreationForm
-    template_name = 'relationship_app/register.html'
-    success_url = reverse_lazy('login')
+def register(request):
+    """Registers a new user."""
+    if request.user.is_authenticated:
+        return redirect('list-books')
+
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')
+    form = RegistrationForm()
+    context = {'form': form}
+    return render(request, 'relationship_app/register.html', context)
+
+def login(request):
+    """Authenticates a user."""
+    if request.user.is_authenticated:
+        return redirect('list-books')
+
+    if request.method == 'POST':
+        form = AuthenticationForm(request, request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+
+            user = auth.authenticate(username=username, password=password)
+            if user is not None:
+                auth.login(request, user)
+                return redirect('list-books')
+    form = AuthenticationForm()
+    context = {'form': form}
+    return render(request, 'relationship_app/login.html', context)
+
+def logout(request):
+    """Logs a user out."""
+    if request.user.is_authenticated:
+        auth.logout(request)
+    return render(request, 'relationship_app/logout.html')
