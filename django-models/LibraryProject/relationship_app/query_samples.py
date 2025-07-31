@@ -29,15 +29,20 @@ charles_perrault, _ = Author.objects.get_or_create(name="Charles Perrault")
 
 # Book Instantiations
 wonderland, _ = Book.objects.get_or_create(title="Alice in Wonderland",
-                                 author=lewis_caroll)
+                                           author=lewis_caroll,
+                                           publication_year=1871)
 looking_glass, _ = Book.objects.get_or_create(title="Through the Looking Glass",
-                                    author=lewis_caroll)
+                                              author=lewis_caroll,
+                                              publication_year=1996)
 ice_and_fire, _ = Book.objects.get_or_create(title="The Songs of Ice and Fire",
-                                   author=george_martin)
+                                             author=george_martin,
+                                             publication_year=1996)
 cinderella, _ = Book.objects.get_or_create(title="Cinderella",
-                                 author=charles_perrault)
+                                           author=charles_perrault,
+                                           publication_year=1697)
 redeeming_love, _ = Book.objects.get_or_create(title="Redeeming Love",
-                                     author=francine_rivers)
+                                               author=francine_rivers,
+                                               publication_year=1991)
 
 # Library Instantiations
 state_library, _ = Library.objects.get_or_create(name="CRS Library")
