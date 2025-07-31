@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views.generic.detail import DetailView
 from django.contrib.auth.forms import AuthenticationForm
-from django.contrib import auth
+from django.contrib.auth import login, logout, authenticate
 from .models import Library, Book
 from .forms import RegistrationForm
 
@@ -39,7 +39,7 @@ def register(request):
     context = {'form': form}
     return render(request, 'relationship_app/register.html', context)
 
-def login(request):
+def login_user(request):
     """Authenticates a user."""
     if request.user.is_authenticated:
         return redirect('list-books')
@@ -50,16 +50,16 @@ def login(request):
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
 
-            user = auth.authenticate(username=username, password=password)
+            user = authenticate(username=username, password=password)
             if user is not None:
-                auth.login(request, user)
+                login(request, user)
                 return redirect('list-books')
     form = AuthenticationForm()
     context = {'form': form}
     return render(request, 'relationship_app/login.html', context)
 
-def logout(request):
+def logout_user(request):
     """Logs a user out."""
     if request.user.is_authenticated:
-        auth.logout(request)
+        logout(request)
     return render(request, 'relationship_app/logout.html')
