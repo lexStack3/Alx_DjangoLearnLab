@@ -15,4 +15,4 @@ class ListBooksView(ListView):
     """Displays details for a specific library,
     listing all books available in the library."""
     model = Book
-    template_name = 'relationship_app/
+    template_name = 'relationship_app/'
