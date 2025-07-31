@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect
 from django.views.generic.detail import DetailView
-from django.contrib.auth.forms import UserCreationForm
+from django.views.generic.edit import CreateView
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout, authenticate
 from .models import Library, Book
+
 
 def list_books(request):
     books = Book.objects.all()
@@ -38,6 +40,7 @@ def register(request):
     context = {'form': form}
     return render(request, 'relationship_app/register.html', context)
 
+
 def login_user(request):
     """Authenticates a user."""
     if request.user.is_authenticated:
@@ -61,4 +64,7 @@ def logout_user(request):
     """Logs a user out."""
     if request.user.is_authenticated:
         logout(request)
+    return render(request, 'relationship_app/logout.html')
+
+def logged_out_view(request):
     return render(request, 'relationship_app/logout.html')
