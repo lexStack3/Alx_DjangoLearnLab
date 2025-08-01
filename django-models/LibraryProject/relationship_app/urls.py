@@ -22,7 +22,7 @@ urlpatterns = [
 
     # Book CRUD Operation
     
-    path('add_book', views.book_add, name='book-add'),
+    path('add_book/', views.book_add, name='book-add'),
     path('edit_book/<int:pk>', views.book_change, name='book-change'),
     path('delete_book/<int:pk>', views.book_delete, name='book-delete')
 ]
