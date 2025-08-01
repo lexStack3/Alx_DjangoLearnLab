@@ -19,4 +19,10 @@ urlpatterns = [
     path('librarian_view/', views.librarian_view, name='librarian-view'),
     path('member_view/', views.member_view, name='member-view'),
     path('checker/<str:wrong_role>/', views.checker_view, name='checker'),
+
+    # Book CRUD Operation
+    
+    path('book_add', views.book_add, name='book-add'),
+    path('book_change/<int:pk>', views.book_change, name='book-change'),
+    path('book_delete/<int:pk>', views.book_delete, name='book-delete')
 ]

@@ -5,7 +5,9 @@ from django.views.generic.edit import CreateView
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.decorators import permission_required
 from .models import Library, Book
+from .forms import BookForm
 
 
 def list_books(request):
@@ -97,3 +99,39 @@ def member_view(request):
 def checker_view(request, wrong_role):
     context = {'wrong_role': wrong_role}
     return render(request, 'relationship_app/checker_view.html', context)
+
+
+#=================================================================
+#                 IMPLEMENTING CUSTOM PERMISSIONS
+#=================================================================
+@permission_required('relationship_app.can_add_book')
+def book_add(request):
+    """Creates a new book."""
+    if request.method == 'POST':
+        book = BookForm(request.POST)
+        if book.is_valid():
+            book.save()
+            return redirect('list-books')
+    form = BookForm()
+    context = {'form': form}
+    return render(request, 'relationship_app/book_add.html', context)
+
+@permission_required('relationship_app.can_change_book')
+def book_change(request, pk):
+    """Updates an existing book by primary book."""
+    book = Book.objects.get(pk=pk)
+    if request.method == 'POST':
+        book = BookForm(request.POST, instance=book)
+        if book.is_valid():
+            book.save()
+            return redirect('list-books')
+    form = BookForm(instance=book)
+    context = {'form': form}
+    return render(request, 'relationship_app/book_change.html', context)
+
+@permission_required('relationship_app.can_delete_book')
+def book_delete(request, pk):
+    """Deletes a book by its primary key."""
+    book = Book.objects.get(pk=pk)
+    book.delete()
+    return redirect('list-books')

@@ -31,6 +31,13 @@ class Book(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        permissions = [
+            ('can_add_book', 'Can Add Book'),
+            ('can_change_book', 'Can Change Book'),
+            ('can_delete_book', 'Can Delete Book')
+        ]
+
     def __str__(self):
         """Returns the string representation of a book instance."""
         return self.title
