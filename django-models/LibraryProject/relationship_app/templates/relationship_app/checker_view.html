@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Checker Page</title>
+</head>
+<body>
+    <h1>You've the role '{{ request.user.userprofile.role|default:'UNKNOWN' }}' trying to view the '{{ wrong_role }}' page.</h1>
+    <p>Please visit us back with the role '{{ wrong_role }}' 😊</p>
+    <p>Checkout our <a href="{% url 'list-books' }">Books</a></p>
+</body>
+</html>

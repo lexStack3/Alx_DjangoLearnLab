@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
 import datetime
 
@@ -57,3 +58,19 @@ class Librarian(models.Model):
     def __str__(self):
         """Returns a string representation of a librarian instance."""
         return self.name
+
+
+class UserProfile(models.Model):
+    """Model represetantion of a user_profile instance."""
+    ROLE_CHOICES = [
+        ('A', 'Admin'),
+        ('L', 'Librarian'),
+        ('M', 'Member')
+    ]
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    role = models.CharField(max_length=1, choices=ROLE_CHOICES, default='Member')
+
+    def __str__(self):
+        """Returns the string representation of a user_profile instance."""
+        return  self.user.username

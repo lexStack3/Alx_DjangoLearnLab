@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth import login, logout, authenticate
 from .models import Library, Book
 
@@ -68,3 +70,30 @@ def logout_user(request):
 
 def logged_out_view(request):
     return render(request, 'relationship_app/logout.html')
+
+
+#===============================================================
+#           IMPLEMENTING ROLE-BASED ACCESS CONTROL
+#===============================================================
+
+def lazy_checker(role):
+    return reverse_lazy('checker', kwargs={'wrong_role': role})
+
+@user_passes_test(lambda user: user.userprofile.role == 'Admin',
+                  login_url=lazy_checker('Admin'))
+def admin_view(request):
+    return render(request, 'relationship_app/admin_view.html')
+
+@user_passes_test(lambda user: user.userprofile.role == 'Librarian',
+                  login_url=lazy_checker('Librarian'))
+def librarian_view(request):
+    return render(request, 'relationship_app/librarian_view.html')
+
+@user_passes_test(lambda user: user.userprofile.role == 'Member',
+                  login_url=lazy_checker('Member'))
+def member_view(request):
+    return render(request, 'relationship_app/member_view.html')
+
+def checker_view(request, wrong_role):
+    context = {'wrong_role': wrong_role}
+    return render(request, 'relationship_app/checker_view.html', context)
