@@ -1,0 +1,93 @@
+#!/usr/bin/env python3
+"""Testing queries for the Author, Book, Library, and Librarian models
+- Query all books by a specific author.
+- List all books in a library.
+- Retrieve the librarian for a library.
+"""
+import os, sys, django
+
+# Adding the outer project directory to sys.path
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+# Setting correct Django settings module
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "LibraryProject.settings")
+django.setup()
+
+from relationship_app.models import Author, Book, Library, Librarian
+
+# =================================================================================================
+#
+#                                   INSTANTIATION
+#
+# =================================================================================================
+
+# Author Instantiations
+lewis_caroll, _ = Author.objects.get_or_create(name="Lewis Caroll")
+george_martin, _ = Author.objects.get_or_create(name="George R. R. Martin")
+francine_rivers, _ = Author.objects.get_or_create(name="Francine Rivers")
+charles_perrault, _ = Author.objects.get_or_create(name="Charles Perrault")
+
+# Book Instantiations
+wonderland, _ = Book.objects.get_or_create(title="Alice in Wonderland",
+                                           author=lewis_caroll,
+                                           publication_year=1871)
+looking_glass, _ = Book.objects.get_or_create(title="Through the Looking Glass",
+                                              author=lewis_caroll,
+                                              publication_year=1996)
+ice_and_fire, _ = Book.objects.get_or_create(title="The Songs of Ice and Fire",
+                                             author=george_martin,
+                                             publication_year=1996)
+cinderella, _ = Book.objects.get_or_create(title="Cinderella",
+                                           author=charles_perrault,
+                                           publication_year=1697)
+redeeming_love, _ = Book.objects.get_or_create(title="Redeeming Love",
+                                               author=francine_rivers,
+                                               publication_year=1991)
+
+# Library Instantiations
+state_library, _ = Library.objects.get_or_create(name="CRS Library")
+state_library.books.set([wonderland, cinderella])
+
+national_library, _ = Library.objects.get_or_create(name="NG Library")
+national_library.books.set([wonderland,
+                            looking_glass,
+                            ice_and_fire,
+                            cinderella,
+                            redeeming_love])
+
+# Librarian Instantiation
+alex, _ = Librarian.objects.get_or_create(name="Alexander Edim", library=national_library)
+
+
+# =================================================================================================
+#
+#                                               TASK
+#
+# =================================================================================================
+# Quering all books by a specific author
+author_name = "Lewis Caroll"
+author = Author.objects.get(name=author_name)
+books = Book.objects.filter(author=author)
+print("="*40)
+print(f"Books by {author}")
+print("="*40)
+for i, book in enumerate(books, start=1):
+    print("{}: {} by {}".format(i, book, author))
+
+# Listing all books in a library
+library_name = "NG Library"
+library = Library.objects.get(name=library_name)
+lib_books = library.books.all()
+print("\n" + "="*40)
+print(f"Books in {library}")
+print("="*40)
+for i, book in enumerate(lib_books, start=1):
+    print("{}: {} by {}".format(i, book, book.author))
+
+# Retrieves the librarian for a library
+library = Library.objects.get(name="NG Library")
+librarian = Librarian.objects.get(library=library)
+print("\n" + "="*40)
+print(f"{national_library} Librarian")
+print("="*40)
+print("The librarian of {} is {}".format(national_library, librarian))
