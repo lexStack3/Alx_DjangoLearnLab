@@ -135,4 +135,4 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Updating settings to use the custom User model I created
-AUTH_USER_MODEL = 'relationship_app.User'
+AUTH_USER_MODEL = 'bookshelf.CustomUser'
