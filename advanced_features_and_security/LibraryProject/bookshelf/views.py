@@ -5,7 +5,7 @@ from .forms import BookForm
 
 
 @permission_required('bookshelf.can_view', raise_exception=True)
-def list_books(request):
+def book_list(request):
     books = Book.objects.all()
     context = {
         'title': 'Book List',
@@ -20,7 +20,7 @@ def create_book(request):
         book = BookForm(request.POST)
         if book.is_valid():
             book.save()
-            return redirect('list-books')
+            return redirect('book-list')
     form = BookForm()
     context = {
         'title': 'Book Creation',
@@ -38,7 +38,7 @@ def edit_book(request, pk):
         if form.is_valid():
             print("\n\nis valid...\n\n")
             form.save()
-            return redirect('list-books')
+            return redirect('book-list')
     form = BookForm(instance=book)
     context = {
         'title': 'Edit Book',
@@ -52,4 +52,4 @@ def edit_book(request, pk):
 def delete_book(request, pk):
     book = get_object_or_404(Book, pk=pk)
     book.delete()
-    return redirect('list-books')
+    return redirect('book-list')
