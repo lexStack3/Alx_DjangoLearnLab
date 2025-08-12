@@ -21,4 +21,5 @@ from django.contrib.auth import urls
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('relationship_app/', include('relationship_app.urls')),
+    path('bookshelf/', include('bookshelf.urls')),
 ]

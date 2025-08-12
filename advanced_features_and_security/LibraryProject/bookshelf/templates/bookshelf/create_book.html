@@ -1,0 +1,12 @@
+{% extends "bookshelf/base.html"  %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<h3>Creating a new Book</h3>
+<form method='POST'>
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Create Book" />
+</form>
+{% endblock %}

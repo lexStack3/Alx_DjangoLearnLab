@@ -47,6 +47,15 @@ class Book(models.Model):
     author = models.CharField(max_length=100)
     publication_year = models.IntegerField()
 
+    class Meta:
+        default_permissions = ()
+        permissions = (
+            ('can_view', 'Can view a list of books.'),
+            ('can_create', 'Can register a book.'),
+            ('can_edit', 'Can modify a book data.'),
+            ('can_delete', 'Can delete a book.')
+        )
+
     def __str__(self):
         """String representation of a Book instance."""
         return self.title
