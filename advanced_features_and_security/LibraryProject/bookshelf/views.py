@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, permission_required
 from .models import Book
-from .forms import BookForm
+from .forms import BookForm, ExampleForm
 
 
 @permission_required('bookshelf.can_view', raise_exception=True)
@@ -11,7 +11,7 @@ def list_books(request):
         'title': 'Book List',
         'books': books
     }
-    return render(request, 'bookshelf/list_books.html', context)
+    return render(request, 'bookshelf/book_list.html', context)
 
 @login_required
 @permission_required('bookshelf.can_create', raise_exception=True)
@@ -20,7 +20,7 @@ def create_book(request):
         book = BookForm(request.POST)
         if book.is_valid():
             book.save()
-            return redirect('book-list')
+            return redirect('bookshelf:book-list')
     form = BookForm()
     context = {
         'title': 'Book Creation',
@@ -36,9 +36,8 @@ def edit_book(request, pk):
     if request.method == 'POST':
         form = BookForm(request.POST, instance=book)
         if form.is_valid():
-            print("\n\nis valid...\n\n")
             form.save()
-            return redirect('book-list')
+            return redirect('bookshelf:book-list')
     form = BookForm(instance=book)
     context = {
         'title': 'Edit Book',
@@ -52,4 +51,19 @@ def edit_book(request, pk):
 def delete_book(request, pk):
     book = get_object_or_404(Book, pk=pk)
     book.delete()
-    return redirect('book-list')
+    return redirect('bookshelf:book-list')
+
+@login_required
+@permission_required('bookshelf.can_create', raise_exception=True)
+def form_example(request):
+    if request.method == 'POST':
+        form = ExampleForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('bookshelf:book-list')
+    form = ExampleForm()
+    context = {
+        'title': 'Form Example',
+        'form': form
+    }
+    return render(request, 'bookshelf/form_example.html', context)

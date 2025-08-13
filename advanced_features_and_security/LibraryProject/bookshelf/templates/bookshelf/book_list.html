@@ -23,8 +23,8 @@
             <td style="text-align: center;">{{ book.publication_year }}</td>
             <td style="text-align: center;">{{ book.author }}</td>
             <td style="text-align: center;">
-                <a style="color:green" href="{% url 'edit-book' book.id %}">Edit</a> - 
-                <a style="color:red" href="{% url 'delete-book' book.id %}">Delete</a>
+                <a style="color:green" href="{% url 'bookshelf:edit-book' book.id %}">Edit</a> - 
+                <a style="color:red" href="{% url 'bookshelf:delete-book' book.id %}">Delete</a>
             </td>
         </tr>
         {% endfor %}
@@ -33,6 +33,6 @@
 {% else %}
 <p>No books available.</p>
 {% endif %}
-<h5>Add a new<a href="{% url 'create-book' %}">Book</a></h5>
+<h5>Add a new<a href="{% url 'bookshelf:create-book' %}">Book</a></h5>
 
 {% endblock %}
