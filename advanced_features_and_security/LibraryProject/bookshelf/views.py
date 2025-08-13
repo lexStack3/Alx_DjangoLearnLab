@@ -5,7 +5,7 @@ from .forms import BookForm
 
 
 @permission_required('bookshelf.can_view', raise_exception=True)
-def book_list(request):
+def list_books(request):
     books = Book.objects.all()
     context = {
         'title': 'Book List',
