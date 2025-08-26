@@ -2,7 +2,7 @@ from rest_framework import viewsets
 from rest_framework import generics
 from rest_framework import status
 from rest_framework.authentication import TokenAuthentication, SessionAuthentication
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated, IsAdminUser
 
 from .models import Author, Book
 from .serializers import AuthorSerializer, BookSerializer
@@ -22,11 +22,13 @@ class AuthorAPIView(viewsets.ModelViewSet):
 class ListView(generics.ListAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
+    permissions_classes = [IsAuthenticatedOrReadOnly]
 
 
 class DetailView(generics.RetrieveAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly
 
 
 class CreateView(generics.CreateAPIView):
