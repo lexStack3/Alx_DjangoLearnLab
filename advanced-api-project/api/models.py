@@ -15,6 +15,7 @@ class Book(models.Model):
     title = models.CharField(max_length=256)
     publication_year = models.IntegerField()
     author = models.ForeignKey(Author, related_name="books", on_delete=models.CASCADE)
+    owner = models.ForeignKey("auth.User", on_delete=models.CASCADE)
 
     def __str__(self):
         """Returns a string representation of a Book instance."""
