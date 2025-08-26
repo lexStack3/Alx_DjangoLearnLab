@@ -8,6 +8,8 @@ from .models import Author, Book
 from .serializers import AuthorSerializer, BookSerializer
 from .permissions import IsOwner
 
+from django_filters.rest_framework import DjangoFilterBackend
+
 
 class BookAPIView(viewsets.ModelViewSet):
     queryset = Book.objects.all()
@@ -22,13 +24,20 @@ class AuthorAPIView(viewsets.ModelViewSet):
 class ListView(generics.ListAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permissions_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    filterset_fields = {
+        'title': ['exact', 'icontains', 'istartswith'],
+        'publication_year': ['exact', 'gte', 'lte'],
+        'author__name': ['exact', 'icontains', 'istartswith']
+    }
+    search_fields = ['title', 'publication_year', 'author__name']
+    ordering_fields = ['title', 'publication_year', 'author__name']
 
 
 class DetailView(generics.RetrieveAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 
 class CreateView(generics.CreateAPIView):
