@@ -9,9 +9,9 @@ router.register(r'books', views.BookAPIView, basename='book')
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('book_list/', views.ListView.as_view(), name='books-list'),
-    path('book_detail/<int:pk>/', views.DetailView.as_view(), name='book-detial'),
-    path('book_create/', views.CreateView.as_view(), name='book-create'),
-    path('book_update/<int:pk>/', views.UpdateView.as_view(), name='book-update'),
-    path('book_delete/<int:pk>/', views.DeleteView.as_view(), name='book-delete'),
+    path('books/list/', views.ListView.as_view(), name='books-list'),
+    path('books/detail/<int:pk>/', views.DetailView.as_view(), name='book-detial'),
+    path('books/create/', views.CreateView.as_view(), name='book-create'),
+    path('books/update/<int:pk>/', views.UpdateView.as_view(), name='book-update'),
+    path('books/delete/<int:pk>/', views.DeleteView.as_view(), name='book-delete'),
 ]
