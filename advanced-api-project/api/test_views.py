@@ -250,7 +250,7 @@ class TestCRUDWithWrongAuth(APITestCase):
         Testing `IsOwner` permission on updating a book instance not
         created by the authenticated user.
         """
-        self.client.force_authenticate(user=self.random_user)
+        self.client.login(user=self.random_user, password="$Tr0NgP@$$W0Rd")
         url = reverse('book-update', kwargs={'pk': self.book.id})
         payload = {'title': 'Lion King'}
         response = self.client.patch(url, payload, format='json')
