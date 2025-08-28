@@ -8,7 +8,7 @@ class BookSerializer(serializers.ModelSerializer):
     class AuthorWriter(serializers.ModelSerializer):
         class Meta:
             model = Author
-            fields = ['name']
+            fields = ['id', 'name']
 
     author = AuthorWriter()
 
@@ -29,12 +29,10 @@ class BookSerializer(serializers.ModelSerializer):
         return value
 
     def create(self, validated_data):
-        """
-        Makes sure that the author field is created appropraitely.
-        """
         author_data = validated_data.pop('author')
-        author, _ = Author.objects.create_or_get(**author_data)
-        return (Book.objects.create(author=author, **validated_data))
+        author, _ = Author.objects.get_or_create(**author_data)
+        return Book.objects.create(author=author, **validated_data)
+
 
     def update(self, instance, validated_data):
         """
@@ -42,12 +40,15 @@ class BookSerializer(serializers.ModelSerializer):
         """
         author_data = validated_data.pop('author', None)
         if author_data:
-            instance.author = Author.objects.create_or_get(**author_data)
+            instance.author, _ = Author.objects.get_or_create(**author_data)
 
         instance.title = validated_data.get('title', instance.title)
         instance.publication_year = validated_data.get(
-            'publication_year', instance_publication_year)
-        return (instance.save())
+                                        'publication_year',
+                                        instance.publication_year
+                                    )
+        instance.save()
+        return instance
 
 
 class AuthorSerializer(serializers.ModelSerializer):
