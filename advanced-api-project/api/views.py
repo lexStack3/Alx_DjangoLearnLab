@@ -1,6 +1,7 @@
 from rest_framework import viewsets
 from rest_framework import generics
 from rest_framework import status
+from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication, SessionAuthentication
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated, IsAdminUser
 from rest_framework import filters
@@ -23,7 +24,7 @@ class AuthorAPIView(viewsets.ModelViewSet):
 
 
 class ListView(generics.ListAPIView):
-    queryset = Book.objects.all()
+    queryset = Book.objects.prefetch_related('author')
     serializer_class = BookSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
     filter_backends = [rest_framework.DjangoFilterBackend, \
@@ -39,26 +40,30 @@ class ListView(generics.ListAPIView):
 
 
 class DetailView(generics.RetrieveAPIView):
-    queryset = Book.objects.all()
+    queryset = Book.objects.prefetch_related('author')
     serializer_class = BookSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
 
 
-class CreateView(generics.CreateAPIView):
+class CreateView(generics.ListCreateAPIView):
     """
     Enforces `authentication_classes` for the authentication backend,
     `permission_classes` to make sure that the user is authenticated before
     the user can create a book.
     """
+    queryset = Book.objects.all()
     serializer_class = BookSerializer
     authentication_classes = [TokenAuthentication, SessionAuthentication]
     permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return self.queryset.filter(owner=self.request.user)
 
     def perform_create(self, serializer):
         return serializer.save(owner=self.request.user)
 
 
-class UpdateView(generics.UpdateAPIView):
+class UpdateView(generics.RetrieveUpdateAPIView):
     """
     Enforces `authentication_classes` for the authentication backend,
     `permission_classes` to make sure that the user is authenticated and
@@ -71,13 +76,14 @@ class UpdateView(generics.UpdateAPIView):
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
-        serializer = self.serializer_class(instance, data=request.data)
+        partial = kwargs.pop('partial', False)
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
-        return Response(serilaizer.data)
+        return Response(serializer.data)
 
 
-class DeleteView(generics.DestroyAPIView):
+class DeleteView(generics.RetrieveDestroyAPIView):
     """
     Enforces `authentication_classes` for the authentication backend,
     `permission_classes` to make sure that the user is authenticated and
